@@ -452,8 +452,8 @@ function makeSVGChart(containerId, values, labels, color, unit='', parseLevel=fa
     `<text class="chart-val" x="${p.x}" y="${p.y-13}" style="fill:${color};font-size:13px;">${p.val}${unit}</text>`
   ).join('');
 
-  container.innerHTML = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="svg-chart" style="display:block;">
+  container.innerHTML = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;">
+    <svg width="${W}" height="${H}" class="svg-chart" style="display:block;min-width:${W}px;">
       ${gridLines}
       <path class="chart-area" d="${areaPath}" fill="${color}"/>
       <polyline class="chart-line" points="${polyline}" stroke="${color}"/>

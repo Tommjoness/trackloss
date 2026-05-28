@@ -406,13 +406,13 @@ function makeSVGChart(containerId, values, labels, color, unit='', parseLevel=fa
   const container = document.getElementById(containerId);
   if(!container || !values.length) return;
 
-  const W = container.offsetWidth || 320;
-  const H = 120;
-  const PAD = { top:22, right:10, bottom:28, left:10 };
-  const cW = W - PAD.left - PAD.right;
+  const PER_POINT = 52;
+  const PAD = { top:24, right:20, bottom:30, left:20 };
+  const cW = Math.max(values.length - 1, 1) * PER_POINT;
+  const W = cW + PAD.left + PAD.right;
+  const H = 130;
   const cH = H - PAD.top - PAD.bottom;
 
-  // Numerieke waarden voor schaling
   const nums = values.map(v => {
     if(parseLevel) { const n=parseFloat(v); return isNaN(n)?8:n; }
     return parseFloat(v)||0;
@@ -422,10 +422,8 @@ function makeSVGChart(containerId, values, labels, color, unit='', parseLevel=fa
   const maxV = Math.max(...nums);
   const range = maxV - minV || 1;
 
-  const xStep = values.length > 1 ? cW / (values.length - 1) : cW / 2;
-
   const points = nums.map((v, i) => ({
-    x: PAD.left + i * xStep,
+    x: PAD.left + i * PER_POINT,
     y: PAD.top + cH - ((v - minV) / range) * cH,
     val: values[i],
     label: labels[i]
@@ -436,39 +434,34 @@ function makeSVGChart(containerId, values, labels, color, unit='', parseLevel=fa
     points.map(p=>`L${p.x},${p.y}`).join(' ') +
     ` L${points[points.length-1].x},${PAD.top+cH} Z`;
 
-  // Grid lijnen (3)
   const gridLines = [0, 0.5, 1].map(f => {
     const y = PAD.top + cH - f * cH;
-    const val = minV + f * range;
-    const label = Number.isInteger(val) ? val : val.toFixed(1);
     return `<line class="chart-gridline" x1="${PAD.left}" y1="${y}" x2="${PAD.left+cW}" y2="${y}"/>`;
   }).join('');
 
   const dots = points.map((p,i) => {
     const isLast = i === points.length - 1;
-    return `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="${isLast?5:3.5}" fill="${isLast?color:color}" stroke="var(--navy2)" stroke-width="2"/>`;
+    return `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="${isLast?5:3.5}" fill="${color}" stroke="var(--navy2)" stroke-width="2"/>`;
   }).join('');
 
-  // Labels onderaan (elke 2e als meer dan 6)
-  const xLabels = points.map((p,i) => {
-    if(values.length > 6 && i % 2 !== 0 && i !== values.length-1) return '';
-    return `<text class="chart-label" x="${p.x}" y="${H-4}">${p.label}</text>`;
-  }).join('');
+  const xLabels = points.map(p =>
+    `<text class="chart-label" x="${p.x}" y="${H-4}">${p.label}</text>`
+  ).join('');
 
-  // Waarden boven de punten
-  const valLabels = points.map((p,i) => {
-    if(values.length > 7 && i % 2 !== 0 && i !== values.length-1) return '';
-    return `<text class="chart-val" x="${p.x}" y="${p.y-8}" style="fill:${color};font-size:8px;">${p.val}${unit}</text>`;
-  }).join('');
+  const valLabels = points.map(p =>
+    `<text class="chart-val" x="${p.x}" y="${p.y-9}" style="fill:${color};font-size:8px;">${p.val}${unit}</text>`
+  ).join('');
 
-  container.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="svg-chart">
-    ${gridLines}
-    <path class="chart-area" d="${areaPath}" fill="${color}"/>
-    <polyline class="chart-line" points="${polyline}" stroke="${color}"/>
-    ${dots}
-    ${xLabels}
-    ${valLabels}
-  </svg>`;
+  container.innerHTML = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="svg-chart" style="display:block;">
+      ${gridLines}
+      <path class="chart-area" d="${areaPath}" fill="${color}"/>
+      <polyline class="chart-line" points="${polyline}" stroke="${color}"/>
+      ${dots}
+      ${xLabels}
+      ${valLabels}
+    </svg>
+  </div>`;
 }
 
 // ── STATS PAGE ────────────────────────────────────────────────

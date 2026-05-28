@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="TrackLoss">
 <meta name="theme-color" content="#0d1b2a">
 <link rel="manifest" href="manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <title>TrackLoss</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;600&display=swap');
@@ -236,23 +238,23 @@ body::before {
   <div style="margin-top:16px;">
     <div class="chart-card">
       <div class="section-title">Afstand per sessie</div>
-      <div id="chartAfstand"></div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartAfstand" height="200"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="section-title">Kcal per sessie</div>
-      <div id="chartKcal"></div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartKcal" height="200"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="section-title">Level / Stand opbouw</div>
-      <div id="chartLevel"></div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartLevel" height="200"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="section-title">Sessieduur (min)</div>
-      <div id="chartDuur"></div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartDuur" height="200"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="section-title">Snelheid (km/u)</div>
-      <div id="chartSnelheid"></div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartSnelheid" height="200"></canvas></div>
     </div>
   </div>
 </div>
@@ -401,72 +403,87 @@ function showPage(name, btn) {
   if(name==='settings') renderSettings();
 }
 
-// ── SVG LINE CHART ────────────────────────────────────────────
-function makeSVGChart(containerId, values, labels, color, unit='', parseLevel=false) {
-  const container = document.getElementById(containerId);
-  if(!container || !values.length) return;
+// ── CHART.JS CHARTS ──────────────────────────────────────────
+const chartInstances = {};
 
-  const PER_POINT = 90;
-  const PAD = { top:44, right:28, bottom:44, left:28 };
-  const cW = Math.max(values.length - 1, 1) * PER_POINT;
-  const W = cW + PAD.left + PAD.right;
-  const H = 220;
-  const cH = H - PAD.top - PAD.bottom;
+function makeChart(id, values, labels, color, unit) {
+  // Vernietig bestaande chart
+  if (chartInstances[id]) {
+    chartInstances[id].destroy();
+    delete chartInstances[id];
+  }
 
-  const nums = values.map(v => {
-    if(parseLevel) { const n=parseFloat(v); return isNaN(n)?8:n; }
-    return parseFloat(v)||0;
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+
+  // Stel canvasbreedte in op basis van sessies
+  const minWidth = Math.max(labels.length * 80, 300);
+  canvas.style.width = minWidth + 'px';
+  canvas.width = minWidth * window.devicePixelRatio;
+  canvas.height = 200 * window.devicePixelRatio;
+  canvas.style.height = '200px';
+
+  const nums = values.map(v => parseFloat(v) || 0);
+
+  Chart.register(ChartDataLabels);
+
+  chartInstances[id] = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: nums,
+        borderColor: color,
+        backgroundColor: color + '22',
+        fill: true,
+        tension: 0.3,
+        pointBackgroundColor: color,
+        pointBorderColor: '#1a2d42',
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+      }]
+    },
+    options: {
+      responsive: false,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.parsed.y + (unit || '')
+          }
+        },
+        datalabels: {
+          color: color,
+          font: { size: 12, weight: '600' },
+          formatter: (val) => val + (unit || ''),
+          anchor: 'end',
+          align: 'top',
+          offset: 4,
+          clamp: true,
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#8899aa',
+            font: { size: 12, family: 'DM Mono' },
+            maxRotation: 0,
+          },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          border: { color: 'rgba(0,212,255,0.15)' }
+        },
+        y: {
+          display: false,
+          grace: '20%',
+        }
+      },
+      layout: {
+        padding: { top: 28, bottom: 4, left: 8, right: 16 }
+      }
+    }
   });
-
-  const rawMin = Math.min(...nums);
-  const rawMax = Math.max(...nums);
-  const rawRange = rawMax - rawMin || 1;
-  // Voeg 15% marge toe boven en onder zodat punten nooit de rand raken
-  const margin = rawRange * 0.20;
-  const minV = rawMin - margin;
-  const maxV = rawMax + margin;
-  const range = maxV - minV;
-
-  const points = nums.map((v, i) => ({
-    x: PAD.left + i * PER_POINT,
-    y: PAD.top + cH - ((v - minV) / range) * cH,
-    val: values[i],
-    label: labels[i]
-  }));
-
-  const polyline = points.map(p=>`${p.x},${p.y}`).join(' ');
-  const areaPath = `M${points[0].x},${PAD.top+cH} ` +
-    points.map(p=>`L${p.x},${p.y}`).join(' ') +
-    ` L${points[points.length-1].x},${PAD.top+cH} Z`;
-
-  const gridLines = [0, 0.5, 1].map(f => {
-    const y = PAD.top + cH - f * cH;
-    return `<line class="chart-gridline" x1="${PAD.left}" y1="${y}" x2="${PAD.left+cW}" y2="${y}"/>`;
-  }).join('');
-
-  const dots = points.map((p,i) => {
-    const isLast = i === points.length - 1;
-    return `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="${isLast?7:5}" fill="${color}" stroke="var(--navy2)" stroke-width="2.5"/>`;
-  }).join('');
-
-  const xLabels = points.map(p =>
-    `<text class="chart-label" x="${p.x}" y="${H-8}" style="font-size:13px;">${p.label}</text>`
-  ).join('');
-
-  const valLabels = points.map((p, i) => {
-    return `<text class="chart-val" x="${p.x}" y="${p.y - 14}" style="fill:${color};font-size:13px;font-weight:600;">${p.val}${unit}</text>`;
-  }).join('');
-
-  container.innerHTML = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;">
-    <svg width="${W}" height="${H}" class="svg-chart" style="display:block;min-width:${W}px;">
-      ${gridLines}
-      <path class="chart-area" d="${areaPath}" fill="${color}"/>
-      <polyline class="chart-line" points="${polyline}" stroke="${color}"/>
-      ${dots}
-      ${xLabels}
-      ${valLabels}
-    </svg>
-  </div>`;
 }
 
 // ── STATS PAGE ────────────────────────────────────────────────
@@ -477,12 +494,12 @@ function renderStats() {
   const labels = sessions.map(s => formatShort(s.date));
 
   setTimeout(() => {
-    makeSVGChart('chartAfstand', sessions.map(s=>s.afstand), labels, '#00d4ff', 'km');
-    makeSVGChart('chartKcal',    sessions.map(s=>s.geschatKcal), labels, '#E0457B', '');
-    makeSVGChart('chartLevel',   sessions.map(s=>s.level), labels, '#ffd166', '', true);
-    makeSVGChart('chartDuur',    sessions.map(s=>timeToMin(s.tijd).toFixed(1)), labels, '#39ff14', '');
-    makeSVGChart('chartSnelheid',sessions.map(s=>s.kmU), labels, '#00d4ff', '');
-  }, 50);
+    makeChart('chartAfstand', sessions.map(s=>s.afstand),                          labels, '#00d4ff', 'km');
+    makeChart('chartKcal',    sessions.map(s=>s.geschatKcal),                      labels, '#E0457B', '');
+    makeChart('chartLevel',   sessions.map(s=>parseFloat(s.level)||8),             labels, '#ffd166', '');
+    makeChart('chartDuur',    sessions.map(s=>timeToMin(s.tijd).toFixed(1)),       labels, '#39ff14', '');
+    makeChart('chartSnelheid',sessions.map(s=>s.kmU),                              labels, '#00d4ff', '');
+  }, 80);
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────

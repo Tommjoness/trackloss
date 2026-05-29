@@ -404,10 +404,10 @@ function showPage(name, btn) {
 }
 
 // ── CHART.JS CHARTS ──────────────────────────────────────────
+Chart.register(ChartDataLabels);
 const chartInstances = {};
 
 function makeChart(id, values, labels, color, unit) {
-  // Vernietig bestaande chart
   if (chartInstances[id]) {
     chartInstances[id].destroy();
     delete chartInstances[id];
@@ -416,51 +416,57 @@ function makeChart(id, values, labels, color, unit) {
   const canvas = document.getElementById(id);
   if (!canvas) return;
 
-  // Stel canvasbreedte in op basis van sessies
-  const minWidth = Math.max(labels.length * 80, 300);
-  canvas.style.width = minWidth + 'px';
-  canvas.width = minWidth * window.devicePixelRatio;
-  canvas.height = 200 * window.devicePixelRatio;
-  canvas.style.height = '200px';
+  const PX_PER_POINT = 80;
+  const W = Math.max(labels.length * PX_PER_POINT + 60, 320);
+  const H = 220;
+
+  canvas.width  = W;
+  canvas.height = H;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
 
   const nums = values.map(v => parseFloat(v) || 0);
-
-  Chart.register(ChartDataLabels);
 
   chartInstances[id] = new Chart(canvas, {
     type: 'line',
     data: {
-      labels: labels,
+      labels,
       datasets: [{
         data: nums,
         borderColor: color,
-        backgroundColor: color + '22',
+        backgroundColor: color + '28',
         fill: true,
-        tension: 0.3,
+        tension: 0,
         pointBackgroundColor: color,
         pointBorderColor: '#1a2d42',
-        pointBorderWidth: 2,
-        pointRadius: 6,
-        pointHoverRadius: 8,
+        pointBorderWidth: 2.5,
+        pointRadius: 7,
+        pointHoverRadius: 9,
+        borderWidth: 2.5,
       }]
     },
     options: {
       responsive: false,
-      animation: { duration: 600 },
+      animation: false,
       plugins: {
         legend: { display: false },
         tooltip: {
-          callbacks: {
-            label: ctx => ctx.parsed.y + (unit || '')
-          }
+          backgroundColor: '#1a2d42',
+          titleColor: '#8899aa',
+          bodyColor: color,
+          bodyFont: { size: 14, weight: '600' },
+          callbacks: { label: ctx => '  ' + ctx.parsed.y + (unit || '') }
         },
         datalabels: {
-          color: color,
-          font: { size: 12, weight: '600' },
-          formatter: (val) => val + (unit || ''),
+          color: '#ffffff',
+          backgroundColor: color + 'cc',
+          borderRadius: 4,
+          padding: { top: 3, bottom: 3, left: 5, right: 5 },
+          font: { size: 12, weight: '700', family: 'DM Mono' },
+          formatter: val => val + (unit || ''),
           anchor: 'end',
           align: 'top',
-          offset: 4,
+          offset: 2,
           clamp: true,
         }
       },
@@ -468,19 +474,20 @@ function makeChart(id, values, labels, color, unit) {
         x: {
           ticks: {
             color: '#8899aa',
-            font: { size: 12, family: 'DM Mono' },
+            font: { size: 13, family: 'DM Mono' },
             maxRotation: 0,
+            padding: 6,
           },
-          grid: { color: 'rgba(255,255,255,0.05)' },
-          border: { color: 'rgba(0,212,255,0.15)' }
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          border: { color: 'rgba(0,212,255,0.1)' }
         },
         y: {
           display: false,
-          grace: '20%',
+          grace: '25%',
         }
       },
       layout: {
-        padding: { top: 28, bottom: 4, left: 8, right: 16 }
+        padding: { top: 32, bottom: 4, left: 12, right: 20 }
       }
     }
   });

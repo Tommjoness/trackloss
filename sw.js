@@ -1,4 +1,4 @@
-const CACHE = 'fiets-v9';
+const CACHE = 'fiets-v10';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

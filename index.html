@@ -81,7 +81,7 @@ body::before {
 .nav-btn.active { color: var(--cyan); }
 .nav-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
 
-.page { display: none; padding: 20px 16px 100px; position: relative; z-index: 1; }
+.page { display: none; padding: 48px 16px 100px; position: relative; z-index: 1; }
 .page.active { display: block; }
 
 /* HEADER */
@@ -311,32 +311,6 @@ body::before {
   </div>
 </div>
 
-<!-- INSTELLINGEN -->
-<div class="page" id="page-settings">
-  <div class="settings-card" style="margin-top:16px;">
-    <div class="settings-title">Persoonlijk profiel</div>
-    <div class="settings-row">
-      <label>Gewicht (kg)</label>
-      <input type="number" id="sGewicht" value="84.5">
-    </div>
-    <div class="settings-row">
-      <label>Nuchter sinds</label>
-      <input type="date" id="sNuchterDatum">
-    </div>
-    <div class="settings-row">
-      <label>Start fietsen</label>
-      <input type="date" id="sStartDatum">
-    </div>
-    <button class="btn-save" onclick="saveSettings()">OPSLAAN</button>
-  </div>
-  <div class="settings-card">
-    <div class="settings-title">Data beheer</div>
-    <p style="font-family:'DM Mono',monospace;font-size:10px;color:var(--grey);line-height:1.8;margin-bottom:10px;">Alle data wordt lokaal opgeslagen op dit apparaat.</p>
-    <button class="btn-danger" onclick="exportData()">📤 Exporteer data (JSON)</button>
-    <button class="btn-danger" onclick="resetData()" style="border-color:#ff4757;">⚠️ Reset alle data</button>
-  </div>
-</div>
-
 <!-- NAV -->
 <nav class="nav">
   <button class="nav-btn active" onclick="showPage('dashboard',this)">
@@ -355,10 +329,7 @@ body::before {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     Toevoegen
   </button>
-  <button class="nav-btn" onclick="showPage('settings',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-    Instellingen
-  </button>
+
 </nav>
 
 <script>
@@ -593,39 +564,6 @@ function addSession() {
 
   showToast(`Sessie ${newId} opgeslagen ✓`);
   showPage('dashboard', document.querySelectorAll('.nav-btn')[0]);
-}
-
-// ── SETTINGS ─────────────────────────────────────────────────
-function renderSettings() {
-  const s = getSettings();
-  document.getElementById('sGewicht').value    = s.gewicht;
-  document.getElementById('sNuchterDatum').value = s.nuchterDatum;
-  document.getElementById('sStartDatum').value   = s.startDatum;
-}
-
-function saveSettings() {
-  saveSettingsData({
-    gewicht: parseFloat(document.getElementById('sGewicht').value),
-    nuchterDatum: document.getElementById('sNuchterDatum').value,
-    startDatum:   document.getElementById('sStartDatum').value,
-  });
-  showToast('Instellingen opgeslagen ✓');
-}
-
-function exportData() {
-  const blob = new Blob([JSON.stringify({sessions:getSessions(),settings:getSettings()},null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `fiets-data-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-}
-
-function resetData() {
-  if(!confirm('Weet je zeker dat je alle data wilt verwijderen?')) return;
-  localStorage.removeItem('sessions');
-  localStorage.removeItem('settings');
-  showToast('Data gereset');
-  renderDashboard();
 }
 
 // ── INIT ──────────────────────────────────────────────────────

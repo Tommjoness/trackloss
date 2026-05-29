@@ -501,7 +501,7 @@ function renderStats() {
   const labels = sessions.map(s => formatShort(s.date));
 
   setTimeout(() => {
-    makeChart('chartAfstand', sessions.map(s=>s.afstand),                          labels, '#00d4ff', 'km');
+    makeChart('chartAfstand', sessions.map(s=>s.afstand),                          labels, '#00d4ff', '');
     makeChart('chartKcal',    sessions.map(s=>s.geschatKcal),                      labels, '#E0457B', '');
     makeChart('chartLevel',   sessions.map(s=>parseFloat(s.level)||8),             labels, '#ffd166', '');
     makeChart('chartDuur',    sessions.map(s=>timeToMin(s.tijd).toFixed(1)),       labels, '#39ff14', '');

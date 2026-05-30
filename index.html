@@ -27,164 +27,94 @@
   --red: #ff4757;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--navy); color:var(--white); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
 
-html, body {
-  background: var(--navy);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
+.nav { position:fixed; bottom:0; left:0; right:0; background:rgba(13,27,42,0.96); backdrop-filter:blur(12px); display:flex; border-top:1px solid rgba(0,212,255,0.1); z-index:100; padding-bottom:env(safe-area-inset-bottom); }
+.nav-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 4px; background:none; border:none; color:var(--grey); font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.5px; text-transform:uppercase; cursor:pointer; transition:color 0.2s; }
+.nav-btn.active { color:var(--cyan); }
+.nav-btn svg { width:20px; height:20px; stroke-width:1.5; }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
+.page { display:none; padding:48px 16px 100px; position:relative; z-index:1; }
+.page.active { display:block; }
 
-.nav {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(13,27,42,0.96);
-  backdrop-filter: blur(12px);
-  display: flex;
-  border-top: 1px solid rgba(0,212,255,0.1);
-  z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
-}
+.header { margin-bottom:28px; }
+.header-tag { font-family:'DM Mono',monospace; font-size:9px; color:var(--cyan); letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; }
+.header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(44px,14vw,76px); line-height:1; white-space:nowrap; letter-spacing:2px; }
+.header h1 span { color:var(--cyan); }
+.header-sub { margin-top:6px; font-size:10px; color:var(--grey); font-family:'DM Mono',monospace; }
+.header-sub strong { color:var(--green); }
 
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 10px 4px;
-  background: none;
-  border: none;
-  color: var(--grey);
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.nav-btn.active { color: var(--cyan); }
-.nav-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+.stats-row { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:20px; }
+.stat-card { background:var(--navy2); border:1px solid rgba(0,212,255,0.12); border-radius:14px; padding:16px 14px; position:relative; overflow:hidden; text-align:center; }
+.stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.stat-card.cyan::before { background:var(--cyan); }
+.stat-card.magenta::before { background:var(--magenta); }
+.stat-card.green::before { background:var(--green); }
+.stat-card.gold::before { background:var(--gold); }
+.stat-label { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey); margin-bottom:4px; }
+.stat-value { font-family:'Bebas Neue',sans-serif; font-size:38px; line-height:1; }
+.stat-card.cyan .stat-value { color:var(--cyan); }
+.stat-card.magenta .stat-value { color:var(--magenta); }
+.stat-card.green .stat-value { color:var(--green); }
+.stat-card.gold .stat-value { color:var(--gold); }
+.stat-unit { font-size:9px; color:var(--grey); font-family:'DM Mono',monospace; margin-top:1px; }
 
-.page { display: none; padding: 48px 16px 100px; position: relative; z-index: 1; }
-.page.active { display: block; }
+.nuchter-banner { background:linear-gradient(135deg,rgba(57,255,20,0.08),rgba(0,212,255,0.04)); border:1px solid rgba(57,255,20,0.2); border-radius:14px; padding:20px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:20px; }
+.nuchter-days { font-family:'Bebas Neue',sans-serif; font-size:72px; color:var(--green); line-height:1; }
+.nuchter-text h3 { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; margin-bottom:4px; }
+.nuchter-text p { font-size:10px; color:var(--grey); line-height:1.9; font-family:'DM Mono',monospace; }
+.nuchter-text p strong { color:var(--green); }
 
-/* HEADER */
-.header { margin-bottom: 28px; }
-.header-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--cyan); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
-.header h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 14vw, 76px); line-height: 1; white-space: nowrap; letter-spacing: 2px; }
-.header h1 span { color: var(--cyan); }
-.header-sub { margin-top: 6px; font-size: 10px; color: var(--grey); font-family: 'DM Mono', monospace; }
-.header-sub strong { color: var(--green); }
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.section-title::after { content:''; flex:1; height:1px; background:rgba(0,212,255,0.12); }
 
-/* STAT CARDS */
-.stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-.stat-card { background: var(--navy2); border: 1px solid rgba(0,212,255,0.12); border-radius: 14px; padding: 16px 14px; position: relative; overflow: hidden; text-align: center; }
-.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-.stat-card.cyan::before { background: var(--cyan); }
-.stat-card.magenta::before { background: var(--magenta); }
-.stat-card.green::before { background: var(--green); }
-.stat-card.gold::before { background: var(--gold); }
-.stat-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-bottom: 4px; }
-.stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 38px; line-height: 1; }
-.stat-card.cyan .stat-value { color: var(--cyan); }
-.stat-card.magenta .stat-value { color: var(--magenta); }
-.stat-card.green .stat-value { color: var(--green); }
-.stat-card.gold .stat-value { color: var(--gold); }
-.stat-unit { font-size: 9px; color: var(--grey); font-family: 'DM Mono', monospace; margin-top: 1px; }
+.chart-card { background:var(--navy2); border:1px solid rgba(0,212,255,0.1); border-radius:14px; padding:18px 16px; margin-bottom:16px; }
 
-/* NUCHTER */
-.nuchter-banner { background: linear-gradient(135deg, rgba(57,255,20,0.08), rgba(0,212,255,0.04)); border: 1px solid rgba(57,255,20,0.2); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-bottom: 20px; }
-.nuchter-days { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--green); line-height: 1; }
-.nuchter-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; margin-bottom: 4px; }
-.nuchter-text p { font-size: 10px; color: var(--grey); line-height: 1.9; font-family: 'DM Mono', monospace; }
-.nuchter-text p strong { color: var(--green); }
+.timeline { background:var(--navy2); border:1px solid rgba(0,212,255,0.1); border-radius:14px; padding:18px 16px; margin-bottom:20px; }
+.timeline-item { display:grid; grid-template-columns:30px 1fr auto; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.timeline-item:last-child { border-bottom:none; }
+.t-num { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--cyan); text-align:center; }
+.t-date { font-family:'DM Mono',monospace; font-size:9px; color:var(--grey); }
+.t-machine { font-size:11px; font-weight:600; margin-top:1px; }
+.badge { display:inline-block; font-size:8px; font-family:'DM Mono',monospace; padding:1px 5px; border-radius:3px; margin-left:4px; vertical-align:middle; }
+.badge-tunturi { background:rgba(0,212,255,0.15); color:var(--cyan); }
+.badge-movemia { background:rgba(224,69,123,0.15); color:var(--magenta); }
+.t-stats { font-family:'DM Mono',monospace; font-size:9px; color:var(--grey); margin-top:2px; }
+.t-right { text-align:right; }
+.t-kcal { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--magenta); line-height:1; }
+.t-kcal-label { font-family:'DM Mono',monospace; font-size:8px; color:var(--grey); }
+.t-delete { background:none; border:none; color:var(--grey); font-size:14px; cursor:pointer; padding:4px; display:block; margin-top:2px; }
 
-/* SECTION TITLE */
-.section-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-.section-title::after { content: ''; flex: 1; height: 1px; background: rgba(0,212,255,0.12); }
+.form-card { background:var(--navy2); border:1px solid rgba(0,212,255,0.15); border-radius:14px; padding:20px 16px; margin-bottom:16px; }
+.form-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:2px; margin-bottom:18px; color:var(--cyan); }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--grey); }
+.field input,.field select { background:var(--navy3); border:1px solid rgba(0,212,255,0.15); border-radius:8px; padding:11px 12px; color:var(--white); font-family:'DM Mono',monospace; font-size:14px; width:100%; outline:none; -webkit-appearance:none; transition:border-color 0.2s; }
+.field input:focus,.field select:focus { border-color:var(--cyan); }
+.field input.auto-filled { border-color:var(--green); color:var(--green); }
+.field select option { background:var(--navy2); }
+.btn-add { width:100%; padding:15px; background:var(--cyan); color:var(--navy); border:none; border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; cursor:pointer; transition:opacity 0.2s; }
+.btn-add:active { opacity:0.8; }
 
-/* CHART CARD */
-.chart-card { background: var(--navy2); border: 1px solid rgba(0,212,255,0.1); border-radius: 14px; padding: 18px 16px; margin-bottom: 16px; }
+/* Gewicht pagina */
+.gewicht-huidig { background:var(--navy2); border:1px solid rgba(57,255,20,0.2); border-radius:14px; padding:20px; text-align:center; margin-bottom:20px; }
+.gewicht-getal { font-family:'Bebas Neue',sans-serif; font-size:72px; color:var(--green); line-height:1; }
+.gewicht-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--grey); letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+.gewicht-datum { font-family:'DM Mono',monospace; font-size:10px; color:var(--grey); margin-top:2px; }
 
-/* SVG CHART */
-.svg-chart { width: 100%; overflow: visible; }
-.chart-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.chart-area { opacity: 0.12; }
-.chart-dot { r: 4; stroke-width: 2; stroke: var(--navy2); }
-.chart-label { font-family: 'DM Mono', monospace; font-size: 9px; fill: var(--grey); text-anchor: middle; }
-.chart-val { font-family: 'DM Mono', monospace; font-size: 9px; fill: var(--white); text-anchor: middle; }
-.chart-gridline { stroke: rgba(255,255,255,0.05); stroke-width: 1; }
+.gewicht-log-item { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+.gewicht-log-item:last-child { border-bottom:none; }
+.gewicht-log-datum { font-family:'DM Mono',monospace; font-size:10px; color:var(--grey); }
+.gewicht-log-val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--green); }
+.gewicht-log-del { background:none; border:none; color:var(--grey); font-size:13px; cursor:pointer; }
 
-/* BAR CHART */
-.bar-chart-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.toast { position:fixed; bottom:76px; left:50%; transform:translateX(-50%) translateY(16px); background:var(--cyan); color:var(--navy); font-family:'DM Mono',monospace; font-size:11px; padding:9px 18px; border-radius:20px; opacity:0; transition:opacity 0.3s,transform 0.3s; pointer-events:none; z-index:200; white-space:nowrap; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-/* SPEED CHART */
-.speed-rows { display: flex; flex-direction: column; gap: 8px; }
-.speed-row { display: grid; grid-template-columns: 40px 1fr 52px; align-items: center; gap: 8px; }
-.speed-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--grey); text-align: right; }
-.speed-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 7px; overflow: hidden; }
-.speed-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(to right, var(--cyan), #80eaff); }
-.speed-val { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--white); text-align: right; }
-
-/* SESSION LOG */
-.timeline { background: var(--navy2); border: 1px solid rgba(0,212,255,0.1); border-radius: 14px; padding: 18px 16px; margin-bottom: 20px; }
-.timeline-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.timeline-item:last-child { border-bottom: none; }
-.t-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--cyan); text-align: center; }
-.t-date { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--grey); }
-.t-machine { font-size: 11px; font-weight: 600; margin-top: 1px; }
-.badge { display: inline-block; font-size: 8px; font-family: 'DM Mono', monospace; padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
-.badge-tunturi { background: rgba(0,212,255,0.15); color: var(--cyan); }
-.badge-movemia { background: rgba(224,69,123,0.15); color: var(--magenta); }
-.t-stats { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--grey); margin-top: 2px; }
-.t-right { text-align: right; }
-.t-kcal { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--magenta); line-height: 1; }
-.t-kcal-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--grey); }
-.t-delete { background: none; border: none; color: var(--grey); font-size: 14px; cursor: pointer; padding: 4px; display: block; margin-top: 2px; }
-
-/* FORM */
-.form-card { background: var(--navy2); border: 1px solid rgba(0,212,255,0.15); border-radius: 14px; padding: 20px 16px; margin-bottom: 16px; }
-.form-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; margin-bottom: 18px; color: var(--cyan); }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); }
-.field input, .field select { background: var(--navy3); border: 1px solid rgba(0,212,255,0.15); border-radius: 8px; padding: 11px 12px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 14px; width: 100%; outline: none; -webkit-appearance: none; transition: border-color 0.2s; }
-.field input:focus, .field select:focus { border-color: var(--cyan); }
-.field select option { background: var(--navy2); }
-.btn-add { width: 100%; padding: 15px; background: var(--cyan); color: var(--navy); border: none; border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; cursor: pointer; transition: opacity 0.2s; }
-.btn-add:active { opacity: 0.8; }
-
-/* SETTINGS */
-.settings-card { background: var(--navy2); border: 1px solid rgba(0,212,255,0.1); border-radius: 14px; padding: 18px 16px; margin-bottom: 14px; }
-.settings-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; margin-bottom: 14px; color: var(--gold); }
-.settings-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.settings-row:last-child { border-bottom: none; }
-.settings-row label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--grey); text-transform: uppercase; letter-spacing: 1px; }
-.settings-row input { background: var(--navy3); border: 1px solid rgba(0,212,255,0.15); border-radius: 6px; padding: 7px 10px; color: var(--white); font-family: 'DM Mono', monospace; font-size: 12px; width: 110px; text-align: right; outline: none; }
-.btn-save { width: 100%; padding: 13px; background: var(--navy3); border: 1px solid var(--gold); color: var(--gold); border-radius: 10px; font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 2px; cursor: pointer; margin-top: 6px; }
-.btn-danger { width: 100%; padding: 13px; background: none; border: 1px solid var(--red); color: var(--red); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; margin-top: 8px; }
-
-/* TOAST */
-.toast { position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--cyan); color: var(--navy); font-family: 'DM Mono', monospace; font-size: 11px; padding: 9px 18px; border-radius: 20px; opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 200; white-space: nowrap; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-.empty-state { text-align: center; padding: 36px 20px; color: var(--grey); font-family: 'DM Mono', monospace; font-size: 11px; line-height: 2; }
+.empty-state { text-align:center; padding:36px 20px; color:var(--grey); font-family:'DM Mono',monospace; font-size:11px; line-height:2; }
 </style>
 </head>
 <body>
@@ -198,30 +128,12 @@ body::before {
     <h1>KEEP <span>MOVING</span></h1>
     <div class="header-sub" id="headerSub">Laden...</div>
   </div>
-
   <div class="stats-row">
-    <div class="stat-card cyan">
-      <div class="stat-label">Sessies</div>
-      <div class="stat-value" id="statSessies">0</div>
-      <div class="stat-unit" id="statDagen">—</div>
-    </div>
-    <div class="stat-card magenta">
-      <div class="stat-label">Kcal verbrand</div>
-      <div class="stat-value" id="statKcal">0</div>
-      <div class="stat-unit">geschat werkelijk</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-label">Totale afstand</div>
-      <div class="stat-value" id="statKm">0</div>
-      <div class="stat-unit">km gefietst</div>
-    </div>
-    <div class="stat-card gold">
-      <div class="stat-label">Minuten actief</div>
-      <div class="stat-value" id="statMin">0</div>
-      <div class="stat-unit" id="statUur">—</div>
-    </div>
+    <div class="stat-card cyan"><div class="stat-label">Sessies</div><div class="stat-value" id="statSessies">0</div><div class="stat-unit" id="statDagen">—</div></div>
+    <div class="stat-card magenta"><div class="stat-label">Kcal verbrand</div><div class="stat-value" id="statKcal">0</div><div class="stat-unit">geschat werkelijk</div></div>
+    <div class="stat-card green"><div class="stat-label">Totale afstand</div><div class="stat-value" id="statKm">0</div><div class="stat-unit">km gefietst</div></div>
+    <div class="stat-card gold"><div class="stat-label">Minuten actief</div><div class="stat-value" id="statMin">0</div><div class="stat-unit" id="statUur">—</div></div>
   </div>
-
   <div class="nuchter-banner">
     <div class="nuchter-days" id="nuchterDagen">—</div>
     <div class="nuchter-text">
@@ -235,35 +147,44 @@ body::before {
 <!-- STATISTIEKEN -->
 <div class="page" id="page-stats">
   <div style="margin-top:16px;">
-    <div class="chart-card">
-      <div class="section-title">Afstand per sessie</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartAfstand" height="200"></canvas></div>
+    <div class="chart-card"><div class="section-title">Afstand per sessie</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartAfstand" height="200"></canvas></div></div>
+    <div class="chart-card"><div class="section-title">Kcal per sessie</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartKcal" height="200"></canvas></div></div>
+    <div class="chart-card"><div class="section-title">Level / Stand opbouw</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartLevel" height="200"></canvas></div></div>
+    <div class="chart-card"><div class="section-title">Sessieduur (min)</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartDuur" height="200"></canvas></div></div>
+    <div class="chart-card"><div class="section-title">Snelheid (km/u)</div><div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartSnelheid" height="200"></canvas></div></div>
+  </div>
+</div>
+
+<!-- GEWICHT -->
+<div class="page" id="page-gewicht">
+  <div style="margin-top:16px;">
+    <div class="gewicht-huidig">
+      <div class="gewicht-getal" id="gewichtHuidig">—</div>
+      <div class="gewicht-label">kg · huidig gewicht</div>
+      <div class="gewicht-datum" id="gewichtDatum">—</div>
     </div>
+
     <div class="chart-card">
-      <div class="section-title">Kcal per sessie</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartKcal" height="200"></canvas></div>
+      <div class="section-title">Gewichtsverloop</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartGewicht" height="200"></canvas></div>
     </div>
-    <div class="chart-card">
-      <div class="section-title">Level / Stand opbouw</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartLevel" height="200"></canvas></div>
+
+    <div class="form-card">
+      <div class="form-title">Meting toevoegen</div>
+      <div class="form-grid">
+        <div class="field"><label>Datum</label><input type="date" id="gDatum"></div>
+        <div class="field"><label>Gewicht (kg)</label><input type="number" id="gGewicht" step="0.1" placeholder="84.5"></div>
+      </div>
+      <button class="btn-add" onclick="addGewicht()">OPSLAAN</button>
     </div>
-    <div class="chart-card">
-      <div class="section-title">Sessieduur (min)</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartDuur" height="200"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="section-title">Snelheid (km/u)</div>
-      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><canvas id="chartSnelheid" height="200"></canvas></div>
-    </div>
+
+    <div class="timeline" id="gewichtLog"></div>
   </div>
 </div>
 
 <!-- LOG -->
 <div class="page" id="page-log">
-  <div class="timeline" style="margin-top:16px;">
-    <div class="section-title">Sessie log</div>
-    <div id="sessionList"></div>
-  </div>
+  <div class="timeline" style="margin-top:16px;"><div class="section-title">Sessie log</div><div id="sessionList"></div></div>
 </div>
 
 <!-- TOEVOEGEN -->
@@ -271,41 +192,14 @@ body::before {
   <div class="form-card" style="margin-top:16px;">
     <div class="form-title">Sessie toevoegen</div>
     <div class="form-grid">
-      <div class="field">
-        <label>Datum</label>
-        <input type="date" id="fDatum">
-      </div>
-      <div class="field">
-        <label>Machine</label>
-        <select id="fMachine">
-          <option value="Tunturi">Tunturi</option>
-          <option value="Movemia">Movemia</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Level / Stand</label>
-        <input type="text" id="fLevel" placeholder="bijv. 10">
-      </div>
-      <div class="field">
-        <label>Tijd (MM:SS)</label>
-        <input type="text" id="fTijd" placeholder="25:11">
-      </div>
-      <div class="field">
-        <label>Afstand (km)</label>
-        <input type="number" id="fAfstand" step="0.01" placeholder="13.05">
-      </div>
-      <div class="field">
-        <label>Scherm kcal</label>
-        <input type="number" id="fSchermKcal" step="0.1" placeholder="146.7">
-      </div>
-      <div class="field">
-        <label>Geschat kcal</label>
-        <input type="number" id="fGeschatKcal" placeholder="245">
-      </div>
-      <div class="field">
-        <label>Hartslag</label>
-        <input type="number" id="fHartslag" placeholder="104">
-      </div>
+      <div class="field"><label>Datum</label><input type="date" id="fDatum"></div>
+      <div class="field"><label>Machine</label><select id="fMachine" onchange="autoKcal()"><option value="Tunturi">Tunturi</option><option value="Movemia">Movemia</option></select></div>
+      <div class="field"><label>Level / Stand</label><input type="text" id="fLevel" placeholder="bijv. 10" oninput="autoKcal()"></div>
+      <div class="field"><label>Tijd (MM:SS)</label><input type="text" id="fTijd" placeholder="25:11" oninput="autoKcal()"></div>
+      <div class="field"><label>Afstand (km)</label><input type="number" id="fAfstand" step="0.01" placeholder="13.05"></div>
+      <div class="field"><label>Scherm kcal</label><input type="number" id="fSchermKcal" step="0.1" placeholder="146.7" oninput="autoKcal()"></div>
+      <div class="field"><label>Geschat kcal</label><input type="number" id="fGeschatKcal" placeholder="auto"></div>
+      <div class="field"><label>Hartslag</label><input type="number" id="fHartslag" placeholder="104"></div>
     </div>
     <button class="btn-add" onclick="addSession()">SESSIE OPSLAAN</button>
   </div>
@@ -321,6 +215,10 @@ body::before {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     Statistieken
   </button>
+  <button class="nav-btn" onclick="showPage('gewicht',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6l9-3 9 3v7c0 5-4.5 8-9 9-4.5-1-9-4-9-9V6z"/></svg>
+    Gewicht
+  </button>
   <button class="nav-btn" onclick="showPage('log',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
     Log
@@ -329,11 +227,10 @@ body::before {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     Toevoegen
   </button>
-
 </nav>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────
+// ── STANDAARD DATA ────────────────────────────────────────────
 const DEFAULT_SESSIONS = [
   { id:1,  date:'2026-05-11', machine:'Tunturi', level:'8',   tijd:'20:36', afstand:10.05, kmU:29.2, schermKcal:90.6,   geschatKcal:185, hartslag:104 },
   { id:2,  date:'2026-05-12', machine:'Tunturi', level:'8',   tijd:'21:41', afstand:10.03, kmU:27.8, schermKcal:90.3,   geschatKcal:195, hartslag:104 },
@@ -347,19 +244,72 @@ const DEFAULT_SESSIONS = [
   { id:10, date:'2026-05-28', machine:'Tunturi', level:'10',  tijd:'25:11', afstand:13.05, kmU:31.1, schermKcal:146.7,  geschatKcal:245, hartslag:104 },
 ];
 
-const DEFAULT_SETTINGS = { gewicht:84.5, nuchterDatum:'2026-05-07', startDatum:'2026-05-11' };
+const DEFAULT_GEWICHT = [
+  { id:1, date:'2026-05-21', gewicht:84.5 }
+];
 
-function getSessions() { try { return JSON.parse(localStorage.getItem('sessions')) || DEFAULT_SESSIONS; } catch { return DEFAULT_SESSIONS; } }
-function saveSessions(s) { localStorage.setItem('sessions', JSON.stringify(s)); }
-function getSettings() { try { return { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem('settings')) || {}) }; } catch { return DEFAULT_SETTINGS; } }
-function saveSettingsData(s) { localStorage.setItem('settings', JSON.stringify(s)); }
+const NUCHTER_DATUM = '2026-05-07';
+const START_DATUM   = '2026-05-11';
+
+// ── STORAGE ───────────────────────────────────────────────────
+function getSessions()  { try { return JSON.parse(localStorage.getItem('sessions'))  || DEFAULT_SESSIONS; } catch { return DEFAULT_SESSIONS; } }
+function saveSessions(s){ localStorage.setItem('sessions', JSON.stringify(s)); }
+function getGewicht()   { try { return JSON.parse(localStorage.getItem('gewicht'))   || DEFAULT_GEWICHT;  } catch { return DEFAULT_GEWICHT; } }
+function saveGewicht(g) { localStorage.setItem('gewicht', JSON.stringify(g)); }
 
 // ── HELPERS ───────────────────────────────────────────────────
-function timeToMin(t) { const [m,s] = (t||'0:0').split(':').map(Number); return m + (s||0)/60; }
-function formatDate(iso) { const d = new Date(iso+'T12:00:00'); return d.toLocaleDateString('nl-NL',{day:'numeric',month:'short'}); }
-function formatShort(iso) { const d = new Date(iso+'T12:00:00'); return `${d.getDate()}/${d.getMonth()+1}`; }
-function daysBetween(ds) { return Math.floor((new Date() - new Date(ds+'T00:00:00')) / 86400000); }
+function timeToMin(t) { const [m,s]=(t||'0:0').split(':').map(Number); return m+(s||0)/60; }
+function formatDate(iso) { return new Date(iso+'T12:00:00').toLocaleDateString('nl-NL',{day:'numeric',month:'short'}); }
+function formatShort(iso) { const d=new Date(iso+'T12:00:00'); return `${d.getDate()}/${d.getMonth()+1}`; }
+function daysBetween(ds) { return Math.floor((new Date()-new Date(ds+'T00:00:00'))/86400000); }
 function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// Huidig gewicht uit log (laatste meting)
+function huidigGewicht() {
+  const log = getGewicht();
+  if (!log.length) return 84.5;
+  const sorted = [...log].sort((a,b)=>a.date.localeCompare(b.date));
+  return sorted[sorted.length-1].gewicht;
+}
+
+// ── KCAL FORMULE ──────────────────────────────────────────────
+function berekenGeschatKcal(schermKcal, tijd, level, machine) {
+  const uren = timeToMin(tijd) / 60;
+  if (uren <= 0 || !schermKcal) return null;
+
+  const levelNum = parseFloat(level) || 8;
+  let met;
+  if      (levelNum <= 8)  met = 7.0;
+  else if (levelNum <= 10) met = 7.8;
+  else if (levelNum <= 12) met = 8.5;
+  else                     met = 9.0;
+
+  const gewicht = huidigGewicht();
+  const metKcal = gewicht * met * uren;
+  const correction = machine === 'Tunturi' ? 1.33 : 1.0;
+  const correctedScherm = schermKcal * correction;
+
+  return Math.round((metKcal + correctedScherm) / 2);
+}
+
+// Auto-vul geschat kcal veld
+function autoKcal() {
+  const scherm  = parseFloat(document.getElementById('fSchermKcal').value);
+  const tijd    = document.getElementById('fTijd').value.trim();
+  const level   = document.getElementById('fLevel').value.trim();
+  const machine = document.getElementById('fMachine').value;
+  const veld    = document.getElementById('fGeschatKcal');
+
+  if (scherm && tijd && level) {
+    const berekend = berekenGeschatKcal(scherm, tijd, level, machine);
+    if (berekend) {
+      veld.value = berekend;
+      veld.classList.add('auto-filled');
+    }
+  } else {
+    veld.classList.remove('auto-filled');
+  }
+}
 
 // ── NAV ───────────────────────────────────────────────────────
 function showPage(name, btn) {
@@ -367,152 +317,143 @@ function showPage(name, btn) {
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
-  if(name==='dashboard') renderDashboard();
-  if(name==='stats') renderStats();
-  if(name==='log') renderLog();
-  if(name==='settings') renderSettings();
-}
-
-// ── CHART.JS CHARTS ──────────────────────────────────────────
-Chart.register(ChartDataLabels);
-const chartInstances = {};
-
-function makeChart(id, values, labels, color, unit) {
-  if (chartInstances[id]) {
-    chartInstances[id].destroy();
-    delete chartInstances[id];
-  }
-
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
-
-  const PX_PER_POINT = 80;
-  const W = Math.max(labels.length * PX_PER_POINT + 60, 320);
-  const H = 220;
-
-  canvas.width  = W;
-  canvas.height = H;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-
-  const nums = values.map(v => parseFloat(v) || 0);
-
-  chartInstances[id] = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        data: nums,
-        borderColor: color,
-        backgroundColor: color + '28',
-        fill: true,
-        tension: 0,
-        pointBackgroundColor: color,
-        pointBorderColor: '#1a2d42',
-        pointBorderWidth: 2.5,
-        pointRadius: 7,
-        pointHoverRadius: 9,
-        borderWidth: 2.5,
-      }]
-    },
-    options: {
-      responsive: false,
-      animation: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#1a2d42',
-          titleColor: '#8899aa',
-          bodyColor: color,
-          bodyFont: { size: 14, weight: '600' },
-          callbacks: { label: ctx => '  ' + ctx.parsed.y + (unit || '') }
-        },
-        datalabels: {
-          color: '#ffffff',
-          backgroundColor: color + 'cc',
-          borderRadius: 4,
-          padding: { top: 3, bottom: 3, left: 5, right: 5 },
-          font: { size: 12, weight: '700', family: 'DM Mono' },
-          formatter: val => val + (unit || ''),
-          anchor: 'end',
-          align: 'top',
-          offset: 2,
-          clamp: true,
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#8899aa',
-            font: { size: 13, family: 'DM Mono' },
-            maxRotation: 0,
-            padding: 6,
-          },
-          grid: { color: 'rgba(255,255,255,0.04)' },
-          border: { color: 'rgba(0,212,255,0.1)' }
-        },
-        y: {
-          display: false,
-          grace: '25%',
-        }
-      },
-      layout: {
-        padding: { top: 32, bottom: 4, left: 12, right: 20 }
-      }
-    }
-  });
-}
-
-// ── STATS PAGE ────────────────────────────────────────────────
-function renderStats() {
-  const sessions = getSessions();
-  if(!sessions.length) return;
-
-  const labels = sessions.map(s => formatShort(s.date));
-
-  setTimeout(() => {
-    makeChart('chartAfstand', sessions.map(s=>s.afstand),                          labels, '#00d4ff', '');
-    makeChart('chartKcal',    sessions.map(s=>s.geschatKcal),                      labels, '#E0457B', '');
-    makeChart('chartLevel',   sessions.map(s=>parseFloat(s.level)||8),             labels, '#ffd166', '');
-    makeChart('chartDuur',    sessions.map(s=>timeToMin(s.tijd).toFixed(1)),       labels, '#39ff14', '');
-    makeChart('chartSnelheid',sessions.map(s=>s.kmU),                              labels, '#00d4ff', '');
-  }, 80);
+  if(name==='dashboard')  renderDashboard();
+  if(name==='stats')      renderStats();
+  if(name==='gewicht')    renderGewicht();
+  if(name==='log')        renderLog();
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────────
 function renderDashboard() {
   const sessions = getSessions();
-  const settings = getSettings();
-
   const totalKcal = sessions.reduce((a,s)=>a+(s.geschatKcal||0),0);
   const totalKm   = sessions.reduce((a,s)=>a+(s.afstand||0),0);
   const totalMin  = sessions.reduce((a,s)=>a+timeToMin(s.tijd||'0:00'),0);
-  const dagen     = daysBetween(settings.startDatum);
+  const dagen     = daysBetween(START_DATUM);
 
   document.getElementById('statSessies').textContent = sessions.length;
-  document.getElementById('statDagen').textContent = `in ${dagen} dagen`;
-  document.getElementById('statKcal').textContent = Math.round(totalKcal);
-  document.getElementById('statKm').textContent = Math.round(totalKm);
-  document.getElementById('statMin').textContent = Math.round(totalMin);
-  document.getElementById('statUur').textContent = `≈ ${(totalMin/60).toFixed(1)} uur`;
-  document.getElementById('headerSub').innerHTML = `Start: ${formatDate(settings.startDatum)} &nbsp;·&nbsp; <strong>${sessions.length} sessies voltooid</strong>`;
+  document.getElementById('statDagen').textContent   = `in ${dagen} dagen`;
+  document.getElementById('statKcal').textContent    = Math.round(totalKcal);
+  document.getElementById('statKm').textContent      = Math.round(totalKm);
+  document.getElementById('statMin').textContent     = Math.round(totalMin);
+  document.getElementById('statUur').textContent     = `≈ ${(totalMin/60).toFixed(1)} uur`;
+  document.getElementById('headerSub').innerHTML     = `Start: ${formatDate(START_DATUM)} &nbsp;·&nbsp; <strong>${sessions.length} sessies voltooid</strong>`;
 
-  const nDagen = daysBetween(settings.nuchterDatum);
-  const nKcal  = Math.round(nDagen * (4000/7));
+  const nDagen = daysBetween(NUCHTER_DATUM);
+  const nKcal  = Math.round(nDagen*(4000/7));
   document.getElementById('nuchterDagen').textContent = nDagen;
-  document.getElementById('nuchterSince').textContent = `Geen alcohol sinds ${formatDate(settings.nuchterDatum)} ${new Date(settings.nuchterDatum+'T12:00:00').getFullYear()}`;
-  document.getElementById('nuchterKcal').textContent = `~${nKcal.toLocaleString('nl-NL')} kcal`;
+  document.getElementById('nuchterSince').textContent = `Geen alcohol sinds ${formatDate(NUCHTER_DATUM)} ${new Date(NUCHTER_DATUM+'T12:00:00').getFullYear()}`;
+  document.getElementById('nuchterKcal').textContent  = `~${nKcal.toLocaleString('nl-NL')} kcal`;
+}
+
+// ── CHART.JS ──────────────────────────────────────────────────
+Chart.register(ChartDataLabels);
+const chartInstances = {};
+
+function makeChart(id, values, labels, color, unit) {
+  if(chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+  const W = Math.max(labels.length*80+60, 320);
+  const H = 220;
+  canvas.width=W; canvas.height=H;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const nums = values.map(v=>parseFloat(v)||0);
+  chartInstances[id] = new Chart(canvas, {
+    type:'line',
+    data:{ labels, datasets:[{ data:nums, borderColor:color, backgroundColor:color+'28', fill:true, tension:0, pointBackgroundColor:color, pointBorderColor:'#1a2d42', pointBorderWidth:2.5, pointRadius:7, pointHoverRadius:9, borderWidth:2.5 }] },
+    options:{
+      responsive:false, animation:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{ backgroundColor:'#1a2d42', titleColor:'#8899aa', bodyColor:color, bodyFont:{size:14,weight:'600'}, callbacks:{label:ctx=>'  '+ctx.parsed.y+(unit||'')} },
+        datalabels:{ color:'#ffffff', backgroundColor:color+'cc', borderRadius:4, padding:{top:3,bottom:3,left:5,right:5}, font:{size:12,weight:'700',family:'DM Mono'}, formatter:val=>val+(unit||''), anchor:'end', align:'top', offset:2, clamp:true }
+      },
+      scales:{
+        x:{ ticks:{color:'#8899aa',font:{size:13,family:'DM Mono'},maxRotation:0,padding:6}, grid:{color:'rgba(255,255,255,0.04)'}, border:{color:'rgba(0,212,255,0.1)'} },
+        y:{ display:false, grace:'25%' }
+      },
+      layout:{ padding:{top:32,bottom:4,left:12,right:20} }
+    }
+  });
+}
+
+// ── STATISTIEKEN ──────────────────────────────────────────────
+function renderStats() {
+  const sessions = getSessions();
+  if(!sessions.length) return;
+  const labels = sessions.map(s=>formatShort(s.date));
+  setTimeout(()=>{
+    makeChart('chartAfstand', sessions.map(s=>s.afstand),                        labels, '#00d4ff', '');
+    makeChart('chartKcal',    sessions.map(s=>s.geschatKcal),                    labels, '#E0457B', '');
+    makeChart('chartLevel',   sessions.map(s=>parseFloat(s.level)||8),           labels, '#ffd166', '');
+    makeChart('chartDuur',    sessions.map(s=>timeToMin(s.tijd).toFixed(1)),     labels, '#39ff14', '');
+    makeChart('chartSnelheid',sessions.map(s=>s.kmU),                            labels, '#00d4ff', '');
+  }, 80);
+}
+
+// ── GEWICHT ───────────────────────────────────────────────────
+function renderGewicht() {
+  const log = getGewicht().sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(log.length) {
+    const laatste = log[log.length-1];
+    document.getElementById('gewichtHuidig').textContent = laatste.gewicht;
+    document.getElementById('gewichtDatum').textContent  = `Gemeten op ${formatDate(laatste.date)}`;
+  }
+
+  // Chart
+  if(log.length >= 2) {
+    const labels = log.map(g=>formatShort(g.date));
+    const values = log.map(g=>g.gewicht);
+    setTimeout(()=>makeChart('chartGewicht', values, labels, '#39ff14', 'kg'), 80);
+  } else {
+    const c = document.getElementById('chartGewicht');
+    if(c) { const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height); }
+  }
+
+  // Log lijst
+  const logEl = document.getElementById('gewichtLog');
+  if(!log.length) { logEl.innerHTML='<div class="empty-state">Nog geen metingen.</div>'; return; }
+  logEl.innerHTML = '<div class="section-title">Metingen</div>' +
+    [...log].reverse().map(g=>`
+    <div class="gewicht-log-item">
+      <div class="gewicht-log-datum">${formatDate(g.date)}</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="gewicht-log-val">${g.gewicht} kg</div>
+        <button class="gewicht-log-del" onclick="deleteGewicht(${g.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function addGewicht() {
+  const datum   = document.getElementById('gDatum').value;
+  const gewicht = parseFloat(document.getElementById('gGewicht').value);
+  if(!datum || isNaN(gewicht)) { showToast('Vul datum en gewicht in'); return; }
+  const log = getGewicht();
+  const newId = log.length ? Math.max(...log.map(g=>g.id))+1 : 1;
+  log.push({id:newId, date:datum, gewicht});
+  log.sort((a,b)=>a.date.localeCompare(b.date));
+  saveGewicht(log);
+  document.getElementById('gGewicht').value='';
+  showToast(`${gewicht} kg opgeslagen ✓`);
+  renderGewicht();
+}
+
+function deleteGewicht(id) {
+  if(!confirm('Meting verwijderen?')) return;
+  saveGewicht(getGewicht().filter(g=>g.id!==id));
+  renderGewicht();
+  showToast('Meting verwijderd');
 }
 
 // ── LOG ───────────────────────────────────────────────────────
 function renderLog() {
   const sessions = getSessions();
   const list = document.getElementById('sessionList');
-  if(!sessions.length) { list.innerHTML='<div class="empty-state">Nog geen sessies gelogd.</div>'; return; }
-  list.innerHTML = [...sessions].reverse().map((s,i) => {
-    const badge = s.machine==='Tunturi'
-      ? '<span class="badge badge-tunturi">Tunturi</span>'
-      : '<span class="badge badge-movemia">Movemia</span>';
+  if(!sessions.length) { list.innerHTML='<div class="empty-state">Nog geen sessies.</div>'; return; }
+  list.innerHTML = [...sessions].reverse().map((s,i)=>{
+    const badge = s.machine==='Tunturi' ? '<span class="badge badge-tunturi">Tunturi</span>' : '<span class="badge badge-movemia">Movemia</span>';
     const hr = s.hartslag ? ` · ${s.hartslag} bpm` : '';
     return `<div class="timeline-item">
       <div class="t-num">${sessions.length-i}</div>
@@ -537,7 +478,7 @@ function deleteSession(id) {
   showToast('Sessie verwijderd');
 }
 
-// ── ADD ───────────────────────────────────────────────────────
+// ── TOEVOEGEN ─────────────────────────────────────────────────
 function addSession() {
   const datum       = document.getElementById('fDatum').value;
   const machine     = document.getElementById('fMachine').value;
@@ -555,12 +496,14 @@ function addSession() {
 
   const sessions = getSessions();
   const newId = sessions.length ? Math.max(...sessions.map(s=>s.id))+1 : 1;
-  sessions.push({ id:newId, date:datum, machine, level, tijd, afstand, kmU, schermKcal, geschatKcal, hartslag });
+  sessions.push({id:newId, date:datum, machine, level, tijd, afstand, kmU, schermKcal, geschatKcal, hartslag});
   sessions.sort((a,b)=>a.date.localeCompare(b.date));
   saveSessions(sessions);
 
-  ['fDatum','fLevel','fTijd','fAfstand','fSchermKcal','fGeschatKcal','fHartslag'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('fDatum').valueAsDate = new Date();
+  ['fLevel','fTijd','fAfstand','fSchermKcal','fHartslag'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fGeschatKcal').value='';
+  document.getElementById('fGeschatKcal').classList.remove('auto-filled');
+  document.getElementById('fDatum').valueAsDate=new Date();
 
   showToast(`Sessie ${newId} opgeslagen ✓`);
   showPage('dashboard', document.querySelectorAll('.nav-btn')[0]);
@@ -568,8 +511,10 @@ function addSession() {
 
 // ── INIT ──────────────────────────────────────────────────────
 document.getElementById('fDatum').valueAsDate = new Date();
+document.getElementById('gDatum').valueAsDate = new Date();
+
 if(!localStorage.getItem('sessions')) saveSessions(DEFAULT_SESSIONS);
-if(!localStorage.getItem('settings')) saveSettingsData(DEFAULT_SETTINGS);
+if(!localStorage.getItem('gewicht'))  saveGewicht(DEFAULT_GEWICHT);
 
 renderDashboard();
 

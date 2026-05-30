@@ -130,7 +130,7 @@ body::before { content:''; position:fixed; inset:0; background-image:linear-grad
   </div>
   <div class="stats-row">
     <div class="stat-card cyan"><div class="stat-label">Sessies</div><div class="stat-value" id="statSessies">0</div><div class="stat-unit" id="statDagen">—</div></div>
-    <div class="stat-card magenta"><div class="stat-label">Kcal verbrand</div><div class="stat-value" id="statKcal">0</div><div class="stat-unit">geschat werkelijk</div></div>
+    <div class="stat-card magenta"><div class="stat-label">Kcal verbrand</div><div class="stat-value" id="statKcal">0</div><div class="stat-unit">&nbsp;</div></div>
     <div class="stat-card green"><div class="stat-label">Totale afstand</div><div class="stat-value" id="statKm">0</div><div class="stat-unit">km gefietst</div></div>
     <div class="stat-card gold"><div class="stat-label">Minuten actief</div><div class="stat-value" id="statMin">0</div><div class="stat-unit" id="statUur">—</div></div>
   </div>
@@ -215,17 +215,17 @@ body::before { content:''; position:fixed; inset:0; background-image:linear-grad
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     Statistieken
   </button>
-  <button class="nav-btn" onclick="showPage('gewicht',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6l9-3 9 3v7c0 5-4.5 8-9 9-4.5-1-9-4-9-9V6z"/></svg>
-    Gewicht
+  <button class="nav-btn" onclick="showPage('add',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Toevoegen
   </button>
   <button class="nav-btn" onclick="showPage('log',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
     Log
   </button>
-  <button class="nav-btn" onclick="showPage('add',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Toevoegen
+  <button class="nav-btn" onclick="showPage('gewicht',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6l9-3 9 3v7c0 5-4.5 8-9 9-4.5-1-9-4-9-9V6z"/></svg>
+    Gewicht
   </button>
 </nav>
 
@@ -464,7 +464,8 @@ function renderLog() {
       </div>
       <div class="t-right">
         <div class="t-kcal">${s.geschatKcal}</div>
-        <div class="t-kcal-label">kcal</div>
+        <div class="t-kcal-label">geschat</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--grey);margin-top:2px;">${s.schermKcal ? Math.round(s.schermKcal) + ' scherm' : ''}</div>
         <button class="t-delete" onclick="deleteSession(${s.id})">✕</button>
       </div>
     </div>`;
